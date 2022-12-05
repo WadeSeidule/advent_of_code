@@ -9,8 +9,8 @@ def input_lines(file: str) -> list[str]:
 curr_dir = pathlib.Path(__file__).parent.resolve()
 lines = input_lines(f'{curr_dir}/input.txt')
 
-def parse_verticle_lines() -> list[list[str]]:
-    parsed_lines = []
+def parse_verticle_lines() -> tuple[list[list[str]], int]:
+    parsed_lines: list[list[str]] = []
     for i, line in enumerate(lines):
         if line == '':
             return parsed_lines, i
@@ -29,8 +29,10 @@ def parse_verticle_lines() -> list[list[str]]:
 
         parsed_lines.append(item_list)
 
+    raise Exception("Did not parse correctly if got here")
 
-def build_stacks(parsed_lines: list[str]) -> dict[str, list[str]]:
+
+def build_stacks(parsed_lines: list[list[str]]) -> dict[str, list[str]]:
     stacks = collections.defaultdict(list)
     for line in reversed(parsed_lines[:-1]):
         for i, item in enumerate(line):
