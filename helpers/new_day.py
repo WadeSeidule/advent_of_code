@@ -9,7 +9,12 @@ CURR_DIR = pathlib.Path(__file__).parent.resolve()
 AOC_URL = "https://adventofcode.com"
 INPUT_TEMPLATE = "{url}/{year}/day/{day}/input"
 
-def get_input(year, day) -> str:
+LANGUAGES = {
+    "python": f'{CURR_DIR}/templates/template.py',
+    "go": f'{CURR_DIR}/templates/template.go'
+}
+
+def get_input(year: str, day: int) -> str:
     input_url = INPUT_TEMPLATE.format(url=AOC_URL, year=year, day=day)
     with open(f'{CURR_DIR}/cookie.txt') as f:
         cookie = f.read().strip()
@@ -21,10 +26,11 @@ def main() -> None:
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--day', type=int, required=True)
+    parser.add_argument('--language', default='python', choices=list(LANGUAGES.keys()))
+    parser.add_argument('--year', default=datetime.datetime.now().year)
     args = parser.parse_args()
 
-    year = datetime.datetime.now().year
-    day = args.day
+    year, day = args.year, args.day
 
     # create dir
     folder = f"{CURR_DIR}/../{year}/day{day}"
@@ -40,7 +46,7 @@ def main() -> None:
     open(f'{folder}/answer.txt', 'w').close()
 
     # copy template python script to created folder
-    shutil.copyfile(f'{CURR_DIR}/template.py', f'{folder}/day{day}.py')
+    shutil.copyfile(LANGUAGES[args.language], f'{folder}/day{day}.py')
 
     print(f"created: {year}/{day}")
 
